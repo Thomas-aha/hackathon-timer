@@ -50,7 +50,7 @@ app.post('/api/timer/reset', (req, res) => {
   const topic = `timer/${presentationId}/${slideId}/reset`;
   const key = `${presentationId}_${slideId}`;
   const settings = timerSettings.get(key) || {};
-  timerSettings.set(key, { ...settings, timeLeft: mode === TIMER_MODES.COUNT_DOWN ? hours * 3600 + minutes * 60 + seconds : 0, isRunning: false });
+  timerSettings.set(key, { ...settings, timeLeft: mode === TIMER_MODES.COUNT_DOWN ? minutes * 60 + seconds : 0, isRunning: false });
   mqttClient.publish(topic, JSON.stringify({ action: 'reset', timerMode }));
   res.json({ success: true, isRunning: false });
 });

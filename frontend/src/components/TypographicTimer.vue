@@ -1,7 +1,5 @@
 <template>
   <div class="typographic-clock">
-    <span v-if="hours > 0" class="hours">{{ hours }}</span>
-    <span v-if="hours > 0" class="colon">:</span>
     <span class="minutes">{{ minutes }}</span>
     <span class="colon">:</span>
     <span class="seconds">{{ seconds }}</span>
@@ -18,8 +16,7 @@ const props = defineProps({
   },
 });
 
-const hours = computed(() => Math.floor(props.timeLeft / 3600).toString().padStart(2, '0'));
-const minutes = computed(() => Math.floor((props.timeLeft % 3600) / 60).toString().padStart(2, '0'));
+const minutes = computed(() => Math.floor(props.timeLeft / 60).toString().padStart(2, '0'));
 const seconds = computed(() => (props.timeLeft % 60).toString().padStart(2, '0'));
 </script>
 

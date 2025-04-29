@@ -1,8 +1,37 @@
 <template>
-  <div class="icon-clock">
-    <div class="icon-clock-inner">
-      <div class="time-value">{{ timeValue }}</div>
-      <div class="time-unit">{{ timeUnit }}</div>
+  <div class="icon-timer-outer">
+    <svg class="progress-ring" :width="size" :height="size">
+      <defs>
+        <linearGradient id="timer-gradient" x1="0%" y1="0%" x2="100%" y2="100%">
+          <stop offset="0%" stop-color="#6B1EBB" />
+          <stop offset="100%" stop-color="#FF4081" />
+        </linearGradient>
+      </defs>
+      <circle
+        class="progress-ring__bg"
+        :stroke="bgColor"
+        :stroke-width="ringWidth"
+        :r="radius"
+        :cx="size/2"
+        :cy="size/2"
+        fill="none"
+      />
+      <circle
+        class="progress-ring__circle"
+        :stroke="'url(#timer-gradient)'"
+        :stroke-width="ringWidth"
+        :r="radius"
+        :cx="size/2"
+        :cy="size/2"
+        fill="none"
+        :stroke-dasharray="circumference"
+        :stroke-dashoffset="0"
+        stroke-linecap="round"
+      />
+    </svg>
+    <div class="timer-content">
+      <span class="timer-value" :style="gradientTextStyle">{{ timeValue }}</span>
+      <span class="timer-unit">MINS</span>
     </div>
   </div>
 </template>
@@ -17,61 +46,67 @@ const props = defineProps({
   }
 });
 
-const timeValue = computed(() => {
-  if (props.timeLeft >= 3600) {
-    return Math.floor(props.timeLeft / 3600);
-  } else if (props.timeLeft >= 60) {
-    return Math.floor(props.timeLeft / 60);
-  } else {
-    return props.timeLeft;
-  }
-});
+const size = 320;
+const ringWidth = 18;
+const radius = (size - ringWidth) / 2;
+const circumference = 2 * Math.PI * radius;
+const bgColor = '#F3F3F7';
 
-const timeUnit = computed(() => {
-  if (props.timeLeft >= 3600) {
-    return timeValue.value === 1 ? 'hour' : 'hours';
-  } else if (props.timeLeft >= 60) {
-    return timeValue.value === 1 ? 'min' : 'mins';
-  } else {
-    return timeValue.value === 1 ? 'sec' : 'secs';
-  }
-});
+const minutes = computed(() => Math.ceil(props.timeLeft / 60));
+const timeValue = computed(() => minutes.value);
+
+const gradientTextStyle = {
+  background: 'linear-gradient(90deg, #6B1EBB, #FF4081)',
+  WebkitBackgroundClip: 'text',
+  WebkitTextFillColor: 'transparent',
+  fontWeight: 600
+};
 </script>
 
 <style scoped>
-.icon-clock {
-  width: 220px;
-  height: 220px;
-  border-radius: 50%;
-  background: linear-gradient(135deg, #3875D9, #17A5DF, #22C3E6);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  box-shadow: 0 10px 30px rgba(34, 195, 230, 0.3);
-}
-
-.icon-clock-inner {
-  width: 180px;
-  height: 180px;
-  border-radius: 50%;
-  background-color: #F9F5F5;
+.icon-timer-outer {
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
+  background: #fff;
+  border-radius: 50%;
+  width: 340px;
+  height: 340px;
+  position: relative;
+}
+.progress-ring {
+  position: absolute;
+  top: 10px;
+  left: 10px;
+  z-index: 1;
+}
+.progress-ring__bg {
+  stroke: #F3F3F7;
 }
 
-.time-value {
-  font-size: 4rem;
-  font-weight: bold;
-  color: #3875D9;
+.timer-content {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  z-index: 2;
+}
+.timer-value {
+  font-size: 90px;
+  font-weight: 700;
+  letter-spacing: -2px;
   line-height: 1;
+  margin-bottom: 8px;
 }
-
-.time-unit {
-  font-size: 1.2rem;
-  color: #8FB1DF;
-  text-transform: uppercase;
-  margin-top: 5px;
+.timer-unit {
+  font-size: 32px;
+  color: #3E3E5A;
+  font-weight: 500;
+  letter-spacing: 2px;
+  margin-top: 0;
 }
 </style> 

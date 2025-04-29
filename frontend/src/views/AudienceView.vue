@@ -21,7 +21,6 @@ const { presentationId, slideId } = route.query
 
 const data = reactive({
   title: '',
-  hours: 0,
   minutes: 0,
   seconds: 0,
   style: TIMER_STYLES.DIGITAL,
@@ -42,7 +41,6 @@ onMounted(async () => {
         data.title = settings.title || ''
         data.style = settings.style
         data.timeLeft = settings.timeLeft
-        data.hours = Math.floor(data.timeLeft / 3600)
         data.minutes = Math.floor((data.timeLeft % 3600) / 60)
         data.seconds = data.timeLeft % 60
         const startTime = settings.startTime
@@ -110,7 +108,7 @@ const stopTimer = (timeLeft) => {
 const resetTimer = () => {
   clearInterval(timer)
   if (data.mode === TIMER_MODES.COUNT_DOWN) {
-    const totalSeconds = (data.hours * 3600) + (data.minutes * 60) + data.seconds
+    const totalSeconds = (data.minutes * 60) + data.seconds
     data.timeLeft = totalSeconds
   } else {
     data.timeLeft = 0
@@ -125,16 +123,6 @@ const timeValue = computed(() => {
     return Math.floor(data.timeLeft / 60)
   } else {
     return data.timeLeft
-  }
-})
-
-const timeUnit = computed(() => {
-  if (data.timeLeft >= 3600) {
-    return timeValue.value === 1 ? 'hour' : 'hours'
-  } else if (data.timeLeft >= 60) {
-    return timeValue.value === 1 ? 'min' : 'mins'
-  } else {
-    return timeValue.value === 1 ? 'sec' : 'secs'
   }
 })
 </script>

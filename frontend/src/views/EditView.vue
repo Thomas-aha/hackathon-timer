@@ -20,14 +20,6 @@
           >
             <a-space>
               <a-input-number
-                v-model:value="data.hours"
-                :min="0"
-                :max="23"
-                addon-after="h"
-                class="time-input"
-                @change="autoSave"
-              />
-              <a-input-number
                 v-model:value="data.minutes"
                 :min="0"
                 :max="59"
@@ -94,12 +86,6 @@
           </a-form-item>
 
           <div class="inline-form-item">
-            <label>{{ $t("timerSettings.soundAlert") }}</label>
-            <div class="control-wrapper">
-              <a-switch v-model:value="data.settings.soundAlert" @change="autoSave" />
-            </div>
-          </div>
-          <div class="inline-form-item">
             <label>{{ $t("timerSettings.visualAlert") }}</label>
             <div class="control-wrapper">
               <a-switch v-model:value="data.settings.visualAlert" @change="autoSave" />
@@ -141,13 +127,11 @@ const slideId = route.query.slideId;
 const data = reactive({
   title: "",
   titleError: "",
-  hours: 0,
   minutes: 0,
   seconds: 15,
   selectedStyle: TIMER_STYLES.FLIP_CLOCK,
   selectedMode: TIMER_MODES.COUNT_DOWN,
   settings: {
-    soundAlert: true,
     visualAlert: true,
     warningThreshold: 10,
   },
@@ -178,7 +162,6 @@ onMounted(() => {
   );
   if (savedSettings) {
     data.title = savedSettings.title || "";
-    data.hours = savedSettings.hours;
     data.minutes = savedSettings.minutes;
     data.seconds = savedSettings.seconds;
     data.selectedStyle = savedSettings.style;
@@ -197,7 +180,6 @@ const saveSettings = async () => {
     presentationId,
     slideId,
     title: data.title,
-    hours: data.hours,
     minutes: data.minutes,
     seconds: data.seconds,
     style: data.selectedStyle,
@@ -297,6 +279,10 @@ function autoSave() {
   display: flex;
   flex-wrap: wrap;
   gap: 8px;
+}
+
+.style-selection :deep(.ant-radio-button-wrapper) {
+  border-inline-start-width: 1px;
 }
 
 .style-selection :deep(.ant-radio-button-wrapper),

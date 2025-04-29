@@ -5,7 +5,7 @@ const { TIMER_MODES } = require('../constants');
 
 // POST endpoint to save timer settings
 router.post('/settings', (req, res) => {
-  const { presentationId, title, slideId, minutes, seconds, hours, style, settings, mode } = req.body;
+  const { presentationId, title, slideId, minutes, seconds, style, settings, mode } = req.body;
   
   if (!presentationId || !slideId) {
     return res.status(400).json({ error: 'Presentation ID and Slide ID are required' });
@@ -16,11 +16,10 @@ router.post('/settings', (req, res) => {
     minutes,
     seconds,
     title,
-    hours,
     style,
     settings,
     isRunning: false,
-    timeLeft: mode === TIMER_MODES.COUNT_DOWN ? hours * 3600 + minutes * 60 + seconds : 0,
+    timeLeft: mode === TIMER_MODES.COUNT_DOWN ? minutes * 60 + seconds : 0,
     mode
   });
   res.json({ success: true });

@@ -7,17 +7,15 @@ describe('TypographicTimer', () => {
     const wrapper = mount(TypographicTimer, {
       props: { timeLeft: 125 } // 2:05
     });
-    expect(wrapper.find('.hours').exists()).toBe(false);
     expect(wrapper.find('.minutes').text()).toBe('02');
     expect(wrapper.find('.seconds').text()).toBe('05');
   });
 
-  it('renders hours, minutes, and seconds when 1 hour or more', () => {
+  it('renders minutes, and seconds when 1 hour or more', () => {
     const wrapper = mount(TypographicTimer, {
       props: { timeLeft: 3661 } // 1:01:01
     });
-    expect(wrapper.find('.hours').text()).toBe('01');
-    expect(wrapper.find('.minutes').text()).toBe('01');
+    expect(wrapper.find('.minutes').text()).toBe('61');
     expect(wrapper.find('.seconds').text()).toBe('01');
   });
 }); 

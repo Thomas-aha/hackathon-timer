@@ -44,18 +44,16 @@ const data = ref({
   header: '',
   minutes: 0, 
   seconds: 0,
-  hours: 0,
   style: TIMER_STYLES.DIGITAL, 
   isRunning: false,
   mode: TIMER_MODES.COUNT_DOWN,
   settings: {
-    soundAlert: true,
     visualAlert: true,
     warningThreshold: 10,
     showWarning: false,
   },
 })
-const timeLeft = ref(data.value.hours * 3600 + data.value.minutes * 60 + data.value.seconds)
+const timeLeft = ref(data.value.minutes * 60 + data.value.seconds)
 const alertSound = ref(null)
 let timer = null
 
@@ -71,7 +69,6 @@ onMounted(async () => {
         data.value.title = settings.title || ''
         data.value.minutes = settings.minutes
         data.value.seconds = settings.seconds
-        data.value.hours = settings.hours
         data.value.style = settings.style
         data.value.mode = settings.mode || TIMER_MODES.COUNT_DOWN
         data.value.settings = settings.settings || data.value.settings
@@ -140,20 +137,10 @@ const toggleTimer = () => {
           if (data.value.settings.visualAlert && timeLeft.value <= data.value.settings.warningThreshold) {
             data.value.settings.showWarning = true
           }
-          
-          // Play warning sound
-          if (data.value.settings.soundAlert && timeLeft.value === data.value.settings.warningThreshold) {
-            playAlertSound()
-          }
         } else {
           clearInterval(timer)
           data.value.isRunning = false
           data.value.settings.showWarning = false
-          
-          // Play end sound
-          if (data.value.settings.soundAlert) {
-            playAlertSound()
-          }
         }
       } else {
         timeLeft.value++
@@ -188,7 +175,7 @@ const playAlertSound = () => {
 
 const resetTimer = () => {
   clearInterval(timer)
-  timeLeft.value = data.value.mode === TIMER_MODES.COUNT_DOWN ? (data.value.hours * 3600 + data.value.minutes * 60 + data.value.seconds) : 0
+  timeLeft.value = data.value.mode === TIMER_MODES.COUNT_DOWN ? (data.value.minutes * 60 + data.value.seconds) : 0
   data.value.isRunning = false
   data.value.settings.showWarning = false
   client.publish(`timer/${presentationId}/${slideId}/reset`, JSON.stringify({ 
@@ -200,10 +187,9 @@ const resetTimer = () => {
 const adjustTime = (seconds) => {
   if (data.value.mode === TIMER_MODES.COUNT_DOWN) {
     timeLeft.value += seconds
-    data.value.hours = Math.floor(timeLeft.value / 3600)
     data.value.minutes = Math.floor((timeLeft.value % 3600) / 60)
     data.value.seconds = timeLeft.value % 60
-    if (data.value.seconds + data.value.minutes * 60 + data.value.hours * 3600 > data.value.settings.warningThreshold) {
+    if (data.value.seconds + data.value.minutes * 60 > data.value.settings.warningThreshold) {
       data.value.settings.showWarning = false
     }
     client.publish(`timer/${presentationId}/${slideId}/adjust`, JSON.stringify({ seconds }))

@@ -10,10 +10,10 @@ describe('DigitalTimer', () => {
     expect(wrapper.text()).toBe('02:05');
   });
 
-  it('renders hh:mm:ss when 1 hour or more', () => {
+  it('renders mm:ss when 1 hour or more', () => {
     const wrapper = mount(DigitalTimer, {
       props: { timeLeft: 3661 } // 1:01:01
     });
-    expect(wrapper.text()).toBe('01:01:01');
+    expect(wrapper.text()).toBe('61:01');
   });
 }); 

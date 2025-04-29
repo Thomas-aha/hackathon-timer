@@ -11,7 +11,7 @@ A beautiful and feature-rich timer application built with Vue 3 and Node.js, per
 - ⚡ Real-time synchronization across devices using MQTT
 - 🌐 Multi-language support (English, Vietnamese)
 - ⚙️ Customizable settings:
-  - Time limit (hours, minutes, seconds)
+  - Time limit (minutes, seconds)
   - Warning threshold
   - Sound and visual alerts
 - 🎯 Multiple timer modes:
