@@ -172,10 +172,7 @@ onMounted(() => {
 
 const saveSettings = async () => {
   data.titleError = "";
-  if (!data.title.trim()) {
-    data.titleError = t("timerSettings.title") + " is required";
-    return;
-  }
+
   const settingsToSave = {
     presentationId,
     slideId,

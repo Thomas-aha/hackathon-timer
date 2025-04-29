@@ -43,8 +43,8 @@ const data = ref({
   title: '',
   header: '',
   minutes: 0, 
-  seconds: 0,
-  style: TIMER_STYLES.DIGITAL, 
+  seconds: 15,
+  style: TIMER_STYLES.FLIP_CLOCK, 
   isRunning: false,
   mode: TIMER_MODES.COUNT_DOWN,
   settings: {
@@ -204,7 +204,7 @@ const adjustTime = (seconds) => {
   align-items: center;
   justify-content: center;
   min-height: 100vh;
-  background: #f5f5f5;
+  background: transparent;
   padding: 24px;
 }
 
